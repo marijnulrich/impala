@@ -3,32 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, user-scalable=1" />
-    <title></title>
+    <title>Test Page</title>
     <link rel="preconnect" href="https://use.typekit.net" crossorigin />
     <link rel="stylesheet" rel="preload" as="font" href="https://use.typekit.net/.css?v=1738008559" />
-    
-    <script src="scormdriver.js" charset="utf-8"></script>
+</head>
+<body>
+    <h1>Welcome to My Test Page</h1>
+    <button id="sendStatement">Send xAPI Statement</button>
+
     <script>
-        USE_LEGACY_IDENTIFIERS_FOR_2004 = true;
-        REVIEW_MODE_IS_READ_ONLY = false;
-        window.onbeforeunload = () => window.Unload();
-        const LoadContent = function () {
-            [
-                "assets/js/project.js",
-                "dist/main.chunk.js",
-                "dist/runtime-main.bundle.js",
-                "dist/vendors-main.chunk.js",
-            ].forEach((src) => {
-                script = document.createElement("script");
-                script.src = src;
-                script.charset = "utf-8";
-                script.async = false;
-                document.body.appendChild(script);
-            });
-        };
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('sendStatement').addEventListener('click', function() {
             const statement = {
                 actor: {
                     mbox: "mailto:student@example.com",
@@ -60,8 +44,5 @@
             .catch(error => console.error('Error sending statement:', error));
         });
     </script>
-</head>
-<body onload="Start()">
-    <div id="app" style="width: 100%; height: 100%"></div>
 </body>
 </html>
