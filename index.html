@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, user-scalable=1" />
-    <title></title>
+    <title>Test Page</title>
     <link rel="preconnect" href="https://use.typekit.net" crossorigin />
-    <link rel="stylesheet" rel="preload" as="font" href="https://use.typekit.net/.css?v=1738251282" />
+    <link rel="stylesheet" href="https://use.typekit.net/.css?v=1738251282" />
     
     <script src="scormdriver.js" charset="utf-8"></script>
     <script>
@@ -19,7 +19,7 @@
                 "dist/runtime-main.bundle.js",
                 "dist/vendors-main.chunk.js",
             ].forEach((src) => {
-                script = document.createElement("script");
+                const script = document.createElement("script");
                 script.src = src;
                 script.charset = "utf-8";
                 script.async = false;
