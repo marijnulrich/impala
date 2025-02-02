@@ -5,61 +5,71 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=3, user-scalable=1"
     />
-    <title></title>
+    <title>My xAPI Tracked Site</title>
+
     <link rel="preconnect" href="https://use.typekit.net" crossorigin />
-    <link rel="stylesheet" rel="preload" as="font" href="https://use.typekit.net/.css?v=1738492887" />
+    <link rel="stylesheet" href="your-correct-stylesheet.css" />  <!-- Replace with correct path -->
 
     <script src="scormdriver.js" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xapiwrapper/1.11.2/xapiwrapper.min.js"></script>
+
+    <!-- Load xAPIWrapper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xapiwrapper/1.11.2/xapiwrapper.min.js" defer></script>
 
     <script>
       USE_LEGACY_IDENTIFIERS_FOR_2004 = true;
       REVIEW_MODE_IS_READ_ONLY = false;
-      window.onbeforeunload = () => window.Unload();
 
-      // Configure Veracity LRS
-      var conf = {
-        endpoint: "https://github-test.lrs.io/xapi/",
-        auth: "Basic " + btoa("vufeve:talvaz"), // Your Veracity LRS credentials
-      };
-      ADL.XAPIWrapper.changeConfig(conf);
-
-      // Generate a test user email dynamically
-      function getTestUser() {
-        let randomNum = Math.floor(Math.random() * 10000);
-        return `testuser+${randomNum}@example.com`;
-      }
-
-      // Function to send xAPI statements
-      function sendStatement(verbId, verbDisplay, objectId, objectName) {
-        var statement = {
-          actor: {
-            mbox: "mailto:" + getTestUser(), // Generates a different test email each time
-            name: "Test User",
-            objectType: "Agent"
-          },
-          verb: {
-            id: verbId,
-            display: { "en-US": verbDisplay }
-          },
-          object: {
-            id: objectId,
-            definition: {
-              name: { "en-US": objectName },
-              description: { "en-US": "Tracking activity on the website" }
-            },
-            objectType: "Activity"
-          }
-        };
-
-        ADL.XAPIWrapper.sendStatement(statement, function(resp, obj) {
-          console.log("✅ xAPI Statement Sent:", statement, resp);
-        });
-      }
-
-      // Track page load event
+      // Run only when the page has fully loaded
       window.onload = function () {
-        Start(); // Existing function
+        Start(); // Ensure Start() runs correctly
+
+        // Check if xAPIWrapper has loaded
+        if (typeof ADL === "undefined") {
+          console.error("❌ xAPIWrapper failed to load.");
+          return;
+        }
+
+        // Configure Veracity LRS
+        var conf = {
+          endpoint: "https://github-test.lrs.io/xapi/",
+          auth: "Basic " + btoa("vufeve:talvaz"),
+        };
+        ADL.XAPIWrapper.changeConfig(conf);
+
+        // Generate a test user email dynamically
+        function getTestUser() {
+          let randomNum = Math.floor(Math.random() * 10000);
+          return `testuser+${randomNum}@example.com`;
+        }
+
+        // Send xAPI statement
+        function sendStatement(verbId, verbDisplay, objectId, objectName) {
+          var statement = {
+            actor: {
+              mbox: "mailto:" + getTestUser(),
+              name: "Test User",
+              objectType: "Agent"
+            },
+            verb: {
+              id: verbId,
+              display: { "en-US": verbDisplay }
+            },
+            object: {
+              id: objectId,
+              definition: {
+                name: { "en-US": objectName },
+                description: { "en-US": "Tracking activity on the website" }
+              },
+              objectType: "Activity"
+            }
+          };
+
+          ADL.XAPIWrapper.sendStatement(statement, function(resp, obj) {
+            console.log("✅ xAPI Statement Sent:", statement, resp);
+          });
+        }
+
+        // Track page load event
         sendStatement(
           "http://adlnet.gov/expapi/verbs/viewed",
           "viewed",
@@ -68,7 +78,7 @@
         );
       };
 
-      // Modify LoadContent function to ensure proper script loading
+      // Ensure scripts load properly
       const LoadContent = function () {
         [
           "assets/js/project.js",
