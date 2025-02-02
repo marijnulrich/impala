@@ -7,13 +7,12 @@
     />
     <title>My xAPI Tracked Site</title>
 
-    <link rel="preconnect" href="https://use.typekit.net" crossorigin />
-    <link rel="stylesheet" href="your-correct-stylesheet.css" />  <!-- Make sure this file exists -->
+
 
     <script src="scormdriver.js" charset="utf-8"></script>
 
-    <!-- Load xAPIWrapper from local file -->
-    <script src="xapiwrapper.min.js"></script>  <!-- Reference local file -->
+    <!-- Load xAPIWrapper from local file with 'defer' -->
+    <script src="xapiwrapper.min.js" defer></script>  <!-- Ensure script loads before use -->
 
     <script>
       USE_LEGACY_IDENTIFIERS_FOR_2004 = true;
