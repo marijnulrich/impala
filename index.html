@@ -31,57 +31,45 @@
 
 <script src="cryptojs_v3.1.2.js"></script>
 <script src="xapiwrapper.min.js"></script>
-    <script>
-        const endpoint = "https://github-test.lrs.io/xapi/";
-        const username = "vufeve";
-        const password = "talvaz";
+   <script>
+    function send_statement(){
+        var conf = {
+             "endpoint" : "https://lrs.adlnet.gov/xapi/",
+             "auth" : "Basic " + toBase64("xapi-tools:xapi-tools")
+             };
 
-        const auth = "Basic " + btoa(username + ":" + password);
-
-        function sendStatement(verb, objectId, objectName) {
-            const statement = {
-                actor: {
-                    mbox: "mailto:marijnulrich@gmail.com",
-                    name: "marijn"
+        ADL.XAPIWrapper.changeConfig(conf);
+         
+        //define the xapi statement being sent
+        var statement = {
+            "actor": {
+                "mbox": "mailto:Tester@example.com",
+                "name": "Your Name Here",
+                "objectType": "Agent"
+            },
+            "verb": {
+                "id": "http://example.com/xapi/interacted",
+                "display": {"en-US": "interacted"}
+            },
+            "object": {
+                "id": "http://example.com/button_example",
+                "definition": {
+                    "name": {"en-US": "Button example"},
+                    "description": {"en-US": "Example xAPI Button"}
                 },
-                verb: {
-                    id: verb,
-                    display: { "en-US": verb.split('/').pop() }
-                },
-                object: {
-                    id: objectId,
-                    definition: {
-                        name: { "en-US": objectName }
-                    }
-                }
-            };
-
-            ADL.XAPIWrapper.changeConfig({
-                endpoint: endpoint,
-                auth: auth
-            });
-
-            ADL.XAPIWrapper.sendStatement(statement, function (err, resp, body) {
-                if (err) {
-                    console.error("Failed to send statement:", err);
-                } else {
-                    console.log("Statement sent:", body);
-                }
-            });
+                "objectType": "Activity"
+            }
+        }; //end statement definition
+ 
+        // Dispatch the statement to the LRS
+        var result = ADL.XAPIWrapper.sendStatement(statement);
         }
-
-        function trackPageView() {
-            sendStatement("http://adlnet.gov/expapi/verbs/viewed", window.location.href, document.title);
-        }
-
-        function trackButtonClick() {
-            sendStatement("http://adlnet.gov/expapi/verbs/interacted", "http://example.com/button", "Test Button");
-        }
-
-        window.onload = trackPageView;
     </script>
 
   </head>
+<body>
+    <button type="button" onclick="send_statement()">Send Statements</button>
+</body>
   <body onload="Start()">
     <div id="app" style="width: 100%; height: 100%"></div>
   </body>
