@@ -28,6 +28,58 @@
         });
       };
     </script>
+
+<script src="xapiwrapper.min.js"></script>
+    <script>
+        const endpoint = "https://github-test.lrs.io/xapi/";
+        const username = "vufeve";
+        const password = "talvaz";
+
+        const auth = "Basic " + btoa(username + ":" + password);
+
+        function sendStatement(verb, objectId, objectName) {
+            const statement = {
+                actor: {
+                    mbox: "mailto:marijnulrich@gmail.com",
+                    name: "marijn"
+                },
+                verb: {
+                    id: verb,
+                    display: { "en-US": verb.split('/').pop() }
+                },
+                object: {
+                    id: objectId,
+                    definition: {
+                        name: { "en-US": objectName }
+                    }
+                }
+            };
+
+            ADL.XAPIWrapper.changeConfig({
+                endpoint: endpoint,
+                auth: auth
+            });
+
+            ADL.XAPIWrapper.sendStatement(statement, function (err, resp, body) {
+                if (err) {
+                    console.error("Failed to send statement:", err);
+                } else {
+                    console.log("Statement sent:", body);
+                }
+            });
+        }
+
+        function trackPageView() {
+            sendStatement("http://adlnet.gov/expapi/verbs/viewed", window.location.href, document.title);
+        }
+
+        function trackButtonClick() {
+            sendStatement("http://adlnet.gov/expapi/verbs/interacted", "http://example.com/button", "Test Button");
+        }
+
+        window.onload = trackPageView;
+    </script>
+
   </head>
   <body onload="Start()">
     <div id="app" style="width: 100%; height: 100%"></div>
