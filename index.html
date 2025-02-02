@@ -8,26 +8,25 @@
     <title>My xAPI Tracked Site</title>
 
     <link rel="preconnect" href="https://use.typekit.net" crossorigin />
-    <link rel="stylesheet" href="your-correct-stylesheet.css" />  <!-- Replace with correct path -->
+    <link rel="stylesheet" href="your-correct-stylesheet.css" />  <!-- Make sure this file exists -->
 
     <script src="scormdriver.js" charset="utf-8"></script>
 
-    <!-- Load xAPIWrapper -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xapiwrapper/1.11.2/xapiwrapper.min.js" defer></script>
+    <!-- Load xAPIWrapper from local file -->
+    <script src="xapiwrapper.min.js"></script>  <!-- Reference local file -->
 
     <script>
       USE_LEGACY_IDENTIFIERS_FOR_2004 = true;
       REVIEW_MODE_IS_READ_ONLY = false;
 
-      // Run only when the page has fully loaded
+      // Ensure xAPIWrapper is loaded
       window.onload = function () {
-        Start(); // Ensure Start() runs correctly
-
-        // Check if xAPIWrapper has loaded
         if (typeof ADL === "undefined") {
-          console.error("❌ xAPIWrapper failed to load.");
+          console.error("❌ xAPIWrapper failed to load. Check the script path.");
           return;
         }
+
+        console.log("✅ xAPIWrapper loaded successfully!");
 
         // Configure Veracity LRS
         var conf = {
